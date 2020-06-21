@@ -1,5 +1,7 @@
 package com.epam.izh.rd.online.service;
 
+import com.sun.deploy.util.StringUtils;
+
 public class SimpleTextService implements TextService {
 
     /**
@@ -13,7 +15,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String removeString(String base, String remove) {
-        return null; //TODO
+        return base.replaceAll(remove, "");
     }
 
     /**
@@ -24,7 +26,7 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isQuestionString(String text) {
-        return false; //TODO
+        return !text.isEmpty() && text.charAt(text.length() - 1) == '?';
     }
 
     /**
@@ -35,7 +37,14 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String concatenate(String... elements) {
-        return null; //TODO
+
+        String concatenatedString = "";
+
+        for (String element: elements) {
+            concatenatedString += element;
+        }
+
+        return concatenatedString;
     }
 
     /**
@@ -47,7 +56,18 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public String toJumpCase(String text) {
-        return null; //TODO
+
+        String textInJumpCase = "";
+
+        for (int i = 0; i < text.length(); i++) {
+            if (i%2 == 0) {
+                textInJumpCase += text.substring(i, i + 1).toLowerCase();
+            } else {
+                textInJumpCase += text.substring(i, i + 1).toUpperCase();
+            }
+        }
+
+        return textInJumpCase;
     }
 
     /**
@@ -59,6 +79,17 @@ public class SimpleTextService implements TextService {
      */
     @Override
     public boolean isPalindrome(String string) {
-       return false; //TODO
+
+        String cleanString = string.replaceAll("(?U)\\W", "");
+        int indexOfLastElementOfString = cleanString.length() - 1;
+
+        for (int i = 0; i < cleanString.length(); i++) {
+            if (!cleanString.substring(i, i + 1)
+                    .equalsIgnoreCase(cleanString.substring(indexOfLastElementOfString - i, indexOfLastElementOfString - i + 1))) {
+                return false;
+            }
+        }
+
+        return !string.isEmpty();
     }
 }

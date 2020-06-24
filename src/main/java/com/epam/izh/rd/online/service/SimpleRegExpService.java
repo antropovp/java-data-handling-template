@@ -17,21 +17,9 @@ public class SimpleRegExpService implements RegExpService {
     @Override
     public String maskSensitiveData() {
 
-        String textFromFile = "";
+        String textFromFile = new FileServiceImpl().readTextFromFile("./src/main/resources/sensitive_data.txt");
 
-        try (FileReader fileReader = new FileReader("./src/main/resources/sensitive_data.txt")) {
-
-            Scanner scanner = new Scanner(fileReader);
-
-            while (scanner.hasNextLine()) {
-                textFromFile += scanner.nextLine();
-            }
-
-            textFromFile = textFromFile.replaceAll("(?<=\\w\\s)(\\d{4}(?!\\s\\W))", "****");
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        textFromFile = textFromFile.replaceAll("(?<=\\w\\s)(\\d{4}(?!\\s\\W))", "****");
 
         return textFromFile;
     }
@@ -45,25 +33,13 @@ public class SimpleRegExpService implements RegExpService {
     @Override
     public String replacePlaceholders(double paymentAmount, double balance) {
 
-        String textFromFile = "";
+        String textFromFile = new FileServiceImpl().readTextFromFile("./src/main/resources/sensitive_data.txt");
 
         String paymentAmountFormatted = BigDecimal.valueOf(paymentAmount).stripTrailingZeros().toString();
         String balanceFormatted = BigDecimal.valueOf(balance).stripTrailingZeros().toString();
 
-        try (FileReader fileReader = new FileReader("./src/main/resources/sensitive_data.txt")) {
-
-            Scanner scanner = new Scanner(fileReader);
-
-            while (scanner.hasNextLine()) {
-                textFromFile += scanner.nextLine();
-            }
-
-            textFromFile = textFromFile.replaceAll("(\\$\\{payment_amount})", paymentAmountFormatted);
-            textFromFile = textFromFile.replaceAll("(\\$\\{balance})", balanceFormatted);
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        textFromFile = textFromFile.replaceAll("(\\$\\{payment_amount})", paymentAmountFormatted);
+        textFromFile = textFromFile.replaceAll("(\\$\\{balance})", balanceFormatted);
 
         return textFromFile;
     }

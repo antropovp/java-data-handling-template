@@ -1,7 +1,5 @@
 package com.epam.izh.rd.online.service;
 
-import com.sun.deploy.util.StringUtils;
-
 public class SimpleTextService implements TextService {
 
     /**

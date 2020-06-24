@@ -62,11 +62,16 @@ public class FileRepositoryTest {
 
 
     private File getFile(String path) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource(path);
-        if (resource != null) {
-            return new File(resource.getFile());
+//        ClassLoader classLoader = getClass().getClassLoader();
+//        URL resource = classLoader.getResource(path);
+//        if (resource != null) {
+//            return new File(resource.getFile());
+//        }
+        File theFile = new File("./src/main/resources/" + path);
+        if (theFile.exists()) {
+            return theFile;
         }
+
         return new File("");
     }
 }

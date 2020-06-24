@@ -1,16 +1,34 @@
 package com.epam.izh.rd.online.repository;
 
+import com.epam.izh.rd.online.service.FileServiceImpl;
+
+import java.io.File;
+import java.io.IOException;
+
 public class SimpleFileRepository implements FileRepository {
 
     /**
      * Метод рекурсивно подсчитывает количество файлов в директории
      *
-     * @param path путь до директори
+     * @param path путь до директории
      * @return файлов, в том числе скрытых
      */
     @Override
     public long countFilesInDirectory(String path) {
-        return 0;
+
+        long numberOfFilesInDirectory = 0;
+
+        File[] filesInDirectory = new FileServiceImpl().getFilesInDirectoryInsideResourcesFolder(path);
+
+        for (File file: filesInDirectory) {
+            if (file.isDirectory()) {
+                numberOfFilesInDirectory += countFilesInDirectory(file.getPath());
+            } else {
+                numberOfFilesInDirectory++;
+            }
+        }
+
+        return numberOfFilesInDirectory;
     }
 
     /**
@@ -21,7 +39,18 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public long countDirsInDirectory(String path) {
-        return 0;
+
+        long numberOfDirsInDirectory = 1;
+
+        File[] filesInDirectory = new FileServiceImpl().getFilesInDirectoryInsideResourcesFolder(path);
+
+        for (File file: filesInDirectory) {
+            if (file.isDirectory()) {
+                numberOfDirsInDirectory += countDirsInDirectory(file.getPath());
+            }
+        }
+
+        return numberOfDirsInDirectory;
     }
 
     /**
@@ -44,6 +73,18 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public boolean createFile(String path, String name) {
+
+        File newFileDirectory = new File("./src/main/resources/" + path);
+        newFileDirectory.mkdir();
+
+        File newFile = new File(newFileDirectory, name);
+
+        try {
+            return newFile.createNewFile();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
         return false;
     }
 
@@ -55,6 +96,6 @@ public class SimpleFileRepository implements FileRepository {
      */
     @Override
     public String readFileFromResources(String fileName) {
-        return null;
+        return new FileServiceImpl().readTextFromFile("src/main/resources/" + fileName);
     }
 }
